@@ -1,6 +1,11 @@
+import 'package:dashboard/constant.dart';
+import 'package:dashboard/views/event.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
-
+import 'package:hexcolor/hexcolor.dart';
+import 'package:responsive_grid/responsive_grid.dart';
+import 'package:get/get.dart';
 import 'Services/services.dart';
 import 'model/Catfacts.dart';
 
@@ -33,42 +38,55 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var height = AppBar().preferredSize.height;
+
     return AdminScaffold(
       backgroundColor: Colors.white,
+      // backgroundColor: HexColor('FEFBF6'),
+      // backgroundColor: HexColor('#eeeeee'),
+      // backgroundColor: Color.fromARGB(179, 243, 243, 243),
       appBar: AppBar(
-        title: const Text('Sample'),
-      ),
+          foregroundColor: Colors.blue,
+          elevation: 100,
+          title: const Text('Dashboard'),
+          actions: [
+            Row(
+              children: [
+                Container(
+                  margin:
+                      const EdgeInsets.only(top: 10, bottom: 10, right: 5.0),
+                  height: 50,
+                  width: 50,
+                  child: const CircleAvatar(
+                    backgroundImage: AssetImage('./assets/profile.jpg'),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  margin:
+                      const EdgeInsets.only(top: 10, bottom: 10, right: 40.0),
+                  height: 50,
+                  width: 50,
+                  child: const Text('Hazmi'),
+                ),
+              ],
+            ),
+          ]),
       sideBar: SideBar(
+        backgroundColor: Colors.white70,
         items: const [
           AdminMenuItem(
-            title: 'Dashboard',
-            route: '/',
+            title: 'User Dashboard',
             icon: Icons.dashboard,
-          ),
-          AdminMenuItem(
-            title: 'Top Level',
-            icon: Icons.file_copy,
+            route: '/',
             children: [
               AdminMenuItem(
-                title: '   Level Item 1',
-                route: '/secondLevelItem1',
+                title: 'Home',
+                route: '/',
               ),
               AdminMenuItem(
-                title: 'Second Level Item 2',
-                route: '/secondLevelItem2',
-              ),
-              AdminMenuItem(
-                title: 'Third Level',
-                children: [
-                  AdminMenuItem(
-                    title: 'Third Level Item 1',
-                    route: '/thirdLevelItem1',
-                  ),
-                  AdminMenuItem(
-                    title: 'Third Level Item 2',
-                    route: '/thirdLevelItem2',
-                  ),
-                ],
+                title: 'Event',
+                route: '/event',
               ),
             ],
           ),
@@ -79,77 +97,219 @@ class _HomeState extends State<Home> {
             Navigator.of(context).pushNamed(item.route!);
           }
         },
-        header: Container(
-          height: 50,
-          width: double.infinity,
-          color: const Color(0xff444444),
-          child: const Center(
-            child: Text(
-              'header',
-              style: TextStyle(
-                color: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          // color: HexColor('#eeeeee'),
+          // height: 1000,
+          width: MediaQuery.of(context).size.width,
+          // - 240.0,
+          alignment: Alignment.topLeft,
+          margin: const EdgeInsets.all(40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    child: Text(
+                      "Registered Events",
+                      style: titleStyle,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.to(Event(), routeName: '/event');
+                    },
+                    child: Material(
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      elevation: 5,
+                      child: Container(
+                        height: 300,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Flexible(
+                              flex: 2,
+                              child: Container(
+                                width: 500,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20)),
+                                  child: Image.asset(
+                                    './assets/profile.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 3,
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20)),
+                                ),
+                                width: 500,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Flexible(
+                                      flex: 1,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4),
+                                        child: const Text(
+                                          'Dell Charity Event',
+                                          style: textTitle,
+                                        ),
+                                      ),
+                                    ),
+                                    info('Location', 'Kuala Lumpur'),
+                                    info('Time', '9.00 am - 10.00 pm'),
+                                    info('Participants', '1.5K / 5000 '),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ),
-        ),
-        footer: Container(
-          height: 50,
-          width: double.infinity,
-          color: const Color(0xff444444),
-          child: const Center(
-            child: Text(
-              'footer',
-              style: TextStyle(
-                color: Colors.white,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 40),
+                    height: 50,
+                    child: Text(
+                      "Upcoming Events",
+                      style: titleStyle,
+                    ),
+                  ),
+                  Material(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    elevation: 5,
+                    child: Container(
+                      height: 300,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 2,
+                            child: Container(
+                              width: 500,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20)),
+                                child: Image.asset(
+                                  './assets/profile.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20)),
+                              ),
+                              width: 500,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 1,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4),
+                                      child: const Text(
+                                        'Dell Charity Event',
+                                        style: textTitle,
+                                      ),
+                                    ),
+                                  ),
+                                  info('Location', 'Kuala Lumpur'),
+                                  info('Time', '9.00 am - 10.00 pm'),
+                                  info('Participants', '0 / 5000 '),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
+              Container(
+                height: 300,
+                // color: Colors.red,
+                child: ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (isLoading) {
+                        return Container(
+                          color: Colors.amber,
+                          child: Center(child: Text(cat?.fact ?? "0")),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
+              ),
+            ],
           ),
         ),
       ),
-      body: SingleChildScrollView(
-          child: Container(
-        height: 400,
-        width: 400,
-        alignment: Alignment.topLeft,
-        padding: const EdgeInsets.all(10),
-        //   child: FutureBuilder(
-        //       future: getHttp(),
-        //       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //         if (snapshot.hasData) {
-        //           return ListView.builder(
-        //               padding: const EdgeInsets.all(8),
-        //               itemCount: 2,
-        //               itemBuilder: (BuildContext context, int index) {
-        //                 print(snapshot.data['fact']);
-        //                 return Container(
-        //                   height: 50,
-        //                   color: Colors.amber,
-        //                   child: Center(child: Text(snapshot.data['fact'])),
-        //                 );
-        //               });
-        //         } else {
-        //           return Center(
-        //             child: CircularProgressIndicator(),
-        //           );
-        //         }
-        //       }),
-        // ),
-        child: ListView.builder(
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index) {
-              if (isLoading) {
-                return Container(
-                  height: 50,
-                  color: Colors.amber,
-                  child: Center(child: Text(cat?.fact ?? "0")),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }),
-      )),
     );
   }
+}
+
+Widget info(String title, String content) {
+  return Flexible(
+    flex: 1,
+    child: Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: Container(
+            constraints: BoxConstraints(minWidth: 80),
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(
+              title,
+              style: textContentTitle,
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 3,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            child: Text(
+              content,
+              style: textContent,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
